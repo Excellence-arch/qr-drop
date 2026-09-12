@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f0ff" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <rect width="512" height="512" rx="110" fill="url(#bgGrad)" stroke="#312e81" stroke-width="6"/>
+  
+  <!-- Outer QR Finder Pattern TL -->
+  <rect x="96" y="96" width="104" height="104" rx="20" fill="none" stroke="url(#cyanGrad)" stroke-width="14" filter="url(#glow)"/>
+  <rect x="128" y="128" width="40" height="40" rx="8" fill="#00f0ff" />
+
+  <!-- Outer QR Finder Pattern TR -->
+  <rect x="312" y="96" width="104" height="104" rx="20" fill="none" stroke="url(#cyanGrad)" stroke-width="14" filter="url(#glow)"/>
+  <rect x="344" y="128" width="40" height="40" rx="8" fill="#00f0ff" />
+
+  <!-- Outer QR Finder Pattern BL -->
+  <rect x="96" y="312" width="104" height="104" rx="20" fill="none" stroke="url(#cyanGrad)" stroke-width="14" filter="url(#glow)"/>
+  <rect x="128" y="344" width="40" height="40" rx="8" fill="#00f0ff" />
+
+  <!-- Center Optical Drop Beam Icon -->
+  <circle cx="364" cy="364" r="50" fill="#6366f1" opacity="0.2"/>
+  <path d="M 364 290 L 364 380 M 330 350 L 364 384 L 398 350" fill="none" stroke="#00f0ff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" />
+  
+  <!-- Center matrix dots -->
+  <rect x="236" y="116" width="28" height="28" rx="6" fill="#818cf8" />
+  <rect x="236" y="176" width="28" height="28" rx="6" fill="#00f0ff" />
+  <rect x="236" y="236" width="40" height="40" rx="8" fill="#6366f1" />
+  <rect x="116" y="236" width="28" height="28" rx="6" fill="#818cf8" />
+  <rect x="176" y="236" width="28" height="28" rx="6" fill="#00f0ff" />
+  <rect x="296" y="236" width="28" height="28" rx="6" fill="#818cf8" />
+  <rect x="236" y="306" width="28" height="28" rx="6" fill="#818cf8" />
+</svg>
