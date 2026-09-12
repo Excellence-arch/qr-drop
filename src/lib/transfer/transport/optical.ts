@@ -103,6 +103,7 @@ export class QRSenderTransport implements OpticalTransport {
       await QRCode.toCanvas(this.canvas, segments as any, {
         errorCorrectionLevel: this.errorCorrectionLevel,
         margin: 2,
+        width: 360,
         color: {
           dark: this.darkColor,
           light: this.lightColor,
@@ -114,6 +115,7 @@ export class QRSenderTransport implements OpticalTransport {
       await QRCode.toCanvas(this.canvas, binStr, {
         errorCorrectionLevel: this.errorCorrectionLevel,
         margin: 2,
+        width: 360,
         color: {
           dark: this.darkColor,
           light: this.lightColor,

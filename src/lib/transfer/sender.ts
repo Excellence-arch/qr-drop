@@ -245,6 +245,20 @@ export class TransferSender {
   private dataSequence = 0;
 
   /**
+   * Displays a static Sync & Manifest frame.
+   * Used during the alignment / countdown phase before active streaming starts.
+   */
+  public async displaySyncFrame(): Promise<void> {
+    if (!this.transport) return;
+    if (!this.manifestPacketBytes) {
+      await this.prepare();
+    }
+    if (this.manifestPacketBytes) {
+      await this.transport.sendFrame(this.manifestPacketBytes);
+    }
+  }
+
+  /**
    * Generates and transmits the next frame packet.
    * Interleaves MANIFEST packets periodically without skipping data chunk sequences.
    */
@@ -255,8 +269,8 @@ export class TransferSender {
     const totalChunks = this.manifest.totalChunks;
     let packetBytes: Uint8Array;
 
-    // Send MANIFEST packet at sequence 0 and every 8th frame to allow receivers to sync
-    if (this.sequence % 8 === 0 && this.manifestPacketBytes) {
+    // Send MANIFEST packet at sequence 0 and every 4th frame to allow late-joining receivers to lock on instantly
+    if (this.sequence % 4 === 0 && this.manifestPacketBytes) {
       packetBytes = this.manifestPacketBytes;
     } else {
       const chunkSeq = this.dataSequence++;

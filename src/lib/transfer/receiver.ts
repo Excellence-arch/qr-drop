@@ -118,22 +118,32 @@ export class TransferReceiver {
 
     // Handle Transfer Manifest packet
     if (header.packetType === PacketType.MANIFEST) {
-      if (!this.manifest || this.currentTransferId !== header.transferId) {
-        try {
-          const dec = new TextDecoder();
-          const manifestJson = dec.decode(payload);
-          const manifest: TransferManifest = JSON.parse(manifestJson);
+      try {
+        const dec = new TextDecoder();
+        const manifestJson = dec.decode(payload);
+        const manifest: TransferManifest = JSON.parse(manifestJson);
 
-          this.manifest = manifest;
-          this.currentTransferId = header.transferId;
+        const isNewManifest = !this.manifest || this.currentTransferId !== header.transferId;
+        this.manifest = manifest;
+        this.currentTransferId = header.transferId;
+
+        if (!this.decoder) {
           this.decoder = new FountainDecoder(manifest.totalChunks, manifest.chunkSize);
+        }
+
+        if (isNewManifest) {
           this.status = "manifest_received";
           sound.playPacketScanned();
           triggerHaptic("light");
           this.notifyProgress();
-        } catch (err) {
-          console.warn("Failed to parse manifest packet:", err);
         }
+
+        // If decoder already solved all chunks, we can reconstruct immediately now that manifest is here
+        if (this.decoder.isComplete() && !this.isProcessingCompletion) {
+          await this.completeReconstruction();
+        }
+      } catch (err) {
+        console.warn("Failed to parse manifest packet:", err);
       }
       return;
     }
@@ -161,7 +171,13 @@ export class TransferReceiver {
 
         // Check if reconstruction is now complete
         if (this.decoder.isComplete() && !this.isProcessingCompletion) {
-          await this.completeReconstruction();
+          if (this.manifest) {
+            await this.completeReconstruction();
+          } else {
+            // Waiting for next manifest frame to decrypt
+            this.status = "reconstructing";
+            this.notifyProgress();
+          }
         }
       }
     }
